@@ -27,7 +27,7 @@ func TestMain(m *testing.M) {
 // TestAPIDepartment test api // lark_CORP_ID= lark_CORP_SECRET=
 func TestAPIDepartment(t *testing.T) {
 
-	data, err := api.ListDepartment("0", false)
+	data, err := api.ListDepartment(true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,7 +36,7 @@ func TestAPIDepartment(t *testing.T) {
 
 	for _, dept := range data {
 		t.Logf("dept %v", dept)
-		users, err := api.ListUser(dept.ID, true)
+		users, err := api.ListUser(dept.ID, false)
 		if err != nil {
 			t.Fatal(err)
 		}

@@ -58,11 +58,14 @@ func (cd *crypt) DecryptString(s string) (res string, err error) {
 	decryptStream := cipher.NewCBCDecrypter(block, iv)
 	decryptStream.CryptBlocks(decryptedText, cipherText)
 
-	res = string(unpad(decryptedText))
+	res = string(unpad(decryptedText, aes.BlockSize))
 	return
 }
 
-func unpad(s []byte) []byte {
+func unpad(s []byte, size int) []byte {
 	n := len(s)
+	if n%size != 0 {
+		return s
+	}
 	return s[:n-int(s[n-1])]
 }

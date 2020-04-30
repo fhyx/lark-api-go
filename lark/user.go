@@ -104,27 +104,24 @@ func (z EType) String() string {
 //     }
 // }
 type User struct {
-	// CorpUID      string        `json:"corpUserId"`                // required
-	// CorpDeptID   int           `json:"corpDeptCode,string"`       // required
-	UserID           string        `json:"ID"`                      // required
-	Name             string        `json:"name"`                    // required
+	UserID           string        `json:"open_id"`                 // required
+	Name             string        `json:"name"`                    // 用户名
 	NameEN           string        `json:"en_name"`                 // 英文名
-	NamePY           string        `json:"name_py"`                 // 拼音
+	NamePY           string        `json:"name_py"`                 // 用户名拼音
 	EmployeeID       string        `json:"employee_id"`             // 员工ID
-	EmployeeNo       string        `json:"employee_no"`             // 员工编号
+	EmployeeNo       string        `json:"employee_no"`             // 工号
 	EmployeeType     EType         `json:"employee_type,omitempty"` // 员工类型
 	AvatarURI        string        `json:"avatar_url"`              // 头像，原始大小
 	Mobile           string        `json:"mobile"`                  // required
 	Email            string        `json:"email"`                   // required
-	Gender           gender.Gender `json:"gender,omitempty"`
-	Status           Status        `json:"userStatus,omitempty"`
-	Description      string        `json:"description,emitempty"`
-	Address          string        `json:"address,emitempty"`
-	Country          string        `json:"country,omitempty"`
-	City             string        `json:"city,omitempty"`
-	WorkStation      string        `json:"work_station,omitempty"`
-	JoinedStamp      int64         `json:"join_time,omitempty"`
-	UpdatedStamp     int64         `json:"update_time,omitempty"`
+	Gender           gender.Gender `json:"gender,omitempty"`        // 性别
+	Status           Status        `json:"userStatus,omitempty"`    // 状态
+	Description      string        `json:"description,emitempty"`   // 用户个人签名
+	Country          string        `json:"country,omitempty"`       // 用户所在国家
+	City             string        `json:"city,omitempty"`          // 用户所在城市
+	WorkStation      string        `json:"work_station,omitempty"`  // 工位
+	JoinedStamp      int64         `json:"join_time,omitempty"`     // 入职时间
+	UpdatedStamp     int64         `json:"update_time,omitempty"`   // 更新时间
 	LeaderEmployeeID string        `json:"leader_employee_id,omitempty"`
 	LeaderOpenID     string        `json:"leader_open_id,omitempty"`
 

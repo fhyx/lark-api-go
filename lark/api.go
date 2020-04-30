@@ -37,12 +37,17 @@ type API struct {
 	ct         *client.Client
 }
 
-func NewAPI() *API {
-	return New(os.Getenv("LARK_CORP_ID"), os.Getenv("LARK_CORP_SECRET"))
-}
+// NewAPI return new api instance with ([corpID, [corpSecret]])
+func NewAPI(strs ...string) *API {
+	corpID := os.Getenv("LARK_CORP_ID")
+	corpSecret := os.Getenv("LARK_CORP_SECRET")
+	if len(strs) > 0 && len(strs[0]) > 0 {
+		corpID = strs[0]
+		if len(strs) > 1 && len(strs[1]) > 0 {
+			corpSecret = strs[1]
+		}
+	}
 
-// New ...
-func New(corpID, corpSecret string) *API {
 	if corpID == "" || corpSecret == "" {
 		log.Printf("corpID or corpSecret are empty or not found")
 	}
@@ -52,6 +57,7 @@ func New(corpID, corpSecret string) *API {
 	ct := client.NewClient(uriTenantToken)
 	ct.SetContentType("application/json")
 	ct.SetCorp(corpID, corpSecret)
+
 	return &API{
 		corpID:     corpID,
 		corpSecret: corpSecret,
@@ -141,8 +147,12 @@ func (a *API) ListUser(deptID string, recursive bool) (data Users, err error) {
 }
 
 // ListDepartment ...
-func (a *API) ListDepartment(id string, recursive bool) (data Departments, err error) {
+func (a *API) ListDepartment(recursive bool, strs ...string) (data Departments, err error) {
 
+	id := "0"
+	if len(strs) > 0 {
+		id = strs[0]
+	}
 	offset := 0
 	limit := 20
 	uri := fmt.Sprintf("%s?department_id=%s&offset=%d&page_size=%d", uriDeptList, id, offset, limit)

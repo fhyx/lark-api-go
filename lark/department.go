@@ -5,23 +5,21 @@ import (
 )
 
 // DepartmentUp 部门更新请求对象
-// "corpDeptCode": "dddddd",
-// "corpParentCode": "ddfd",
-// "deptNameCn": "生产部门",
-// "deptNameEn": "produce dept",
-// "deptLevel": "1",
-// "managerId": "",
-// "valid": "1",
-// "orderNo": "1000"
+// {
+//     "name":"市场部",
+//     "parent_id":"od-455efa262dc736b3e45a8b17fe945293",
+//     "id":"tt_123456",
+//     "leader_employee_id":"2fab234c",
+//     "leader_open_id":"ou_4a2eb24a52b27c0b7fc6fd04162c0246",
+//     "create_group_chat":true
+// }
 type DepartmentUp struct {
-	CorpDeptID   int    `json:"corpDeptCode,string"`
-	CorpParentID int    `json:"corpParentCode,string"`
-	NameCN       string `json:"deptNameCn"`
-	NameEN       string `json:"deptNameEn"`
-	Level        int    `json:"deptLevel,string"`
-	Leader       string `json:"managerId"`
-	OrderNo      int    `json:"orderNo,string"`
-	Valid        int    `json:"valid,string"`
+	NameCN  string `json:"deptNameCn"`
+	NameEN  string `json:"deptNameEn"`
+	Level   int    `json:"deptLevel,string"`
+	Leader  string `json:"managerId"`
+	OrderNo int    `json:"orderNo,string"`
+	Valid   int    `json:"valid,string"`
 }
 
 type deptBatchReq struct {
@@ -48,15 +46,17 @@ type deptStatusReq struct {
 }
 
 // Department 部门
-// "deptCode": "1",
-// "deptNameCn": "产品销售部",
-// "deptNameEn": "Sales Dept",
-// "fatherCode": "0",
-// "deptLevel": "2",
-// "orderNo": 1
+// "department_info": {
+//     "id":"od-c042a4980ba8e1466050e3e8da2378fe",
+//     "leader_employee_id":"612a67ef",
+//     "leader_open_id":"ou_05065996251935ada9c2b0ecc50be91e",
+//     "chat_id": "oc_405333f8fc89c3262865b014ccbbb274",
+//     "member_count": 79,
+//     "name": "市场部",
+//     "parent_id": "0",
+//     "status": 1
+// }
 type Department struct {
-	// CorpDeptID   int    `json:"corpDeptCode,string,omitempty"`
-	// CorpParentID int    `json:"corpParentCode,string,omitempty"`
 	ID               string `json:"id"`
 	ParentID         string `json:"parent_id"`
 	Name             string `json:"name"`
