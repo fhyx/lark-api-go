@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 
 	"github.com/fhyx/lark-api-go/client"
@@ -25,8 +26,9 @@ const (
 
 	uriTaskStatus = "https://open.feishu.cn/open-apis/contact/v2/task/get" // batch task status
 
-	uriDeptList = "https://open.feishu.cn/open-apis/contact/v1/department/simple/list"
-	uriDeptSync = "https://open.feishu.cn/open-apis/contact/v2/department/batch_add" // 批量添加部门
+	uriDeptSimpList = "https://open.feishu.cn/open-apis/contact/v1/department/simple/list"      // 获取子部门列表
+	uriDeptBatchGet = "https://open.feishu.cn/open-apis/contact/v1/department/detail/batch_get" // 批量获取部门详情
+	uriDeptSync     = "https://open.feishu.cn/open-apis/contact/v2/department/batch_add"        // 批量添加部门
 )
 
 // API ...
@@ -146,16 +148,29 @@ func (a *API) ListUser(deptID string, recursive bool) (data Users, err error) {
 	return
 }
 
-// ListDepartment ...
-func (a *API) ListDepartment(recursive bool, strs ...string) (data Departments, err error) {
-
-	id := "0"
-	if len(strs) > 0 {
-		id = strs[0]
+// GetsDepartments ...
+func (a *API) GetsDepartments(ids []string) (data Departments, err error) {
+	var ret departmentResponse
+	param := url.Values{"department_ids": ids}
+	uri := fmt.Sprintf("%s?%s", uriDeptBatchGet, param.Encode())
+	err = a.ca.GetJSON(uri, &ret)
+	if err == nil {
+		data = ret.Data.Departments
 	}
-	offset := 0
+	return
+}
+
+// ListDepartment ...
+func (a *API) ListDepartment(recursive bool, ids ...string) (data Departments, err error) {
+
+	if len(ids) > 0 {
+		return a.GetsDepartments(ids)
+	}
+	var pageToken string
 	limit := 20
-	uri := fmt.Sprintf("%s?department_id=%s&offset=%d&page_size=%d", uriDeptList, id, offset, limit)
+	id := "0"
+queryF:
+	uri := fmt.Sprintf("%s?department_id=%s&page_token=%s&page_size=%d", uriDeptSimpList, id, pageToken, limit)
 	if recursive {
 		uri += "&fetch_child=true"
 	}
@@ -164,7 +179,12 @@ func (a *API) ListDepartment(recursive bool, strs ...string) (data Departments, 
 	err = a.ca.GetJSON(uri, &ret)
 
 	if err == nil {
-		data = ret.Data.Departments
+		data = append(data, ret.Data.Departments...)
+	}
+	if ret.Data.HasMore && len(ret.Data.PageToken) > 0 {
+		pageToken = ret.Data.PageToken
+		logger().Infow("has more", "pageToken", pageToken)
+		goto queryF
 	}
 
 	// if recursive && id == "0" {
