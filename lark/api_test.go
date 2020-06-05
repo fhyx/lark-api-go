@@ -56,3 +56,11 @@ func TestUser(t *testing.T) {
 	}
 	logger().Infow("got", "user", user)
 }
+
+func TestContactScope(t *testing.T) {
+	cr, err := api.ListContactScope()
+	if err != nil {
+		t.Fatal(err)
+	}
+	logger().Infow("get", "contact scope", cr)
+}
