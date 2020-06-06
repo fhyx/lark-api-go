@@ -16,6 +16,8 @@ const (
 
 	uriAuthorize = "https://open.feishu.cn/open-apis/authen/v1/access_token"
 
+	uriContactScope = "https://open.feishu.cn/open-apis/contact/v1/scope/get"
+
 	uriUserGet        = "https://open.feishu.cn/open-apis/authen/v1/user_info"
 	uriUserGetID      = "https://open.feishu.cn/open-apis/user/v1/batch_get_id"
 	uriUserBatchGet   = "https://open.feishu.cn/open-apis/contact/v1/user/batch_get"
@@ -116,6 +118,16 @@ func uriForUserGet(uid, at string) string {
 	default:
 		return fmt.Sprintf("%s?user_id=%s", uriUserGetID, uid)
 	}
+}
+
+func (a *API) ListContactScope() (*AuthContactResponse, error) {
+	cr := new(AuthContactResponse)
+	err := a.ca.GetJSON(uriContactScope, cr)
+	if err != nil {
+		logger().Infow("list contact scope fail", "err", err)
+		return nil, err
+	}
+	return cr, nil
 }
 
 // GetUser get user with uid,mobile,cuid
