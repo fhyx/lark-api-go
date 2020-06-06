@@ -1,6 +1,6 @@
 package lark
 
-import "github.com/fhyx/lark-api-go/client"
+import "fhyx.online/lark-api-go/client"
 
 type AuthContactResponse struct {
 	client.Error
