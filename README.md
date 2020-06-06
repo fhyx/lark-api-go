@@ -14,7 +14,7 @@ LARK_TEST_UID='for unit test only'
 
 ```go
 
-import "github.com/fhyx/lark-api-go/lark"
+import "fhyx.online/lark-api-go/lark"
 
 
 api := NewAPI() // or New(appId, appSecret)

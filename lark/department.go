@@ -1,7 +1,7 @@
 package lark
 
 import (
-	"github.com/fhyx/lark-api-go/client"
+	"fhyx.online/lark-api-go/client"
 )
 
 // Department 部门

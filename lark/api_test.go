@@ -7,7 +7,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/fhyx/lark-api-go/log"
+	"fhyx.online/lark-api-go/log"
 )
 
 var (

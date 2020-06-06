@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/fhyx/lark-api-go/log"
+	"fhyx.online/lark-api-go/log"
 )
 
 func logger() log.Logger {

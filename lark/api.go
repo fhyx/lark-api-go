@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/fhyx/lark-api-go/client"
+	"fhyx.online/lark-api-go/client"
 )
 
 const (
@@ -163,7 +163,7 @@ func (a *API) GetsDepartments(ids []string) (data Departments, err error) {
 // ListDepartment ...
 func (a *API) ListDepartment(recursive bool, ids ...string) (data Departments, err error) {
 
-	if len(ids) > 0 {
+	if !recursive && len(ids) > 0 {
 		return a.GetsDepartments(ids)
 	}
 	var pageToken string

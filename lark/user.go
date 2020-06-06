@@ -4,8 +4,8 @@ import (
 	// "time"
 	"strings"
 
-	"github.com/fhyx/lark-api-go/client"
-	"github.com/fhyx/lark-api-go/gender"
+	"fhyx.online/lark-api-go/client"
+	"fhyx.online/lark-api-go/gender"
 )
 
 // Status 状态
