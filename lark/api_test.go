@@ -27,7 +27,7 @@ func TestMain(m *testing.M) {
 // TestAPIDepartment test api // lark_CORP_ID= lark_CORP_SECRET=
 func TestAPIDepartment(t *testing.T) {
 
-	data, err := api.ListDepartment(true)
+	data, err := api.ListDepartment(true, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -49,8 +49,8 @@ func TestAPIDepartment(t *testing.T) {
 }
 
 func TestUser(t *testing.T) {
-	uid := os.Getenv("lark_TEST_UID")
-	user, err := api.GetUser(uid, "uid")
+	uid := os.Getenv("lark_TEST_EMAIL")
+	user, err := api.GetUser(uid, CEmail)
 	if err != nil {
 		t.Fatal(err)
 	}

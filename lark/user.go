@@ -50,6 +50,14 @@ const (
 	ETAdvisor
 )
 
+//CType 查询类型
+type CType uint8
+
+const (
+	CEmail CType = iota
+	CMobile
+)
+
 func (z EType) String() string {
 	switch z {
 	case ETNormal:
