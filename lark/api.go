@@ -18,8 +18,9 @@ const (
 
 	uriContactScope = "https://open.feishu.cn/open-apis/contact/v1/scope/get"
 
-	uriUserGet        = "https://open.feishu.cn/open-apis/authen/v1/user_info"
-	uriUserGetID      = "https://open.feishu.cn/open-apis/user/v1/batch_get_id"
+	uriUserGet   = "https://open.feishu.cn/open-apis/authen/v1/user_info"
+	uriUserGetID = "https://open.feishu.cn/open-apis/user/v1/batch_get_id"
+
 	uriUserBatchGet   = "https://open.feishu.cn/open-apis/contact/v1/user/batch_get"
 	uriUserListDetail = "https://open.feishu.cn/open-apis/contact/v1/department/user/detail/list"
 	uriUserListSimp   = "https://open.feishu.cn/open-apis/contact/v1/department/user/list"
@@ -106,17 +107,14 @@ func (a *API) AuthorizeCode(code string) (ou *OAuth2UserInfo, err error) {
 	return
 }
 
-func uriForUserGet(uid, at string) string {
-
+func uriForUserGet(uid string, at CType) string {
 	switch at {
-	// case "uid":
-	// 	return fmt.Sprintf("%s?userId=%s", uriUserGetID, uid)
-	case "email":
+	case CEmail:
 		return fmt.Sprintf("%s?emails=%s", uriUserGetID, uid)
-	case "mobile":
+	case CMobile:
 		return fmt.Sprintf("%s?mobiles=%s", uriUserGetID, uid)
 	default:
-		return fmt.Sprintf("%s?user_id=%s", uriUserGetID, uid)
+		return ""
 	}
 }
 
@@ -130,12 +128,12 @@ func (a *API) ListContactScope() (*AuthContactResponse, error) {
 	return cr, nil
 }
 
-// GetUser get user with uid,mobile,cuid
-func (a *API) GetUser(uid, at string) (*User, error) {
+// GetUser get user with emails,mobile
+func (a *API) GetUser(uid string, at CType) (*User, error) {
 	user := new(User)
 	err := a.ca.GetJSON(uriForUserGet(uid, at), user)
 	if err != nil {
-		logger().Infow("get user fail", "at:"+at, uid, "err", err)
+		logger().Infow("get user fail", "at:", at, uid, "err", err)
 		return nil, err
 	}
 	return user, nil
@@ -172,15 +170,13 @@ func (a *API) GetsDepartments(ids []string) (data Departments, err error) {
 	return
 }
 
-// ListDepartment ...
-func (a *API) ListDepartment(recursive bool, ids ...string) (data Departments, err error) {
-
-	if !recursive && len(ids) > 0 {
-		return a.GetsDepartments(ids)
-	}
+// List child Department ...
+func (a *API) ListDepartment(recursive bool, id string) (data Departments, err error) {
 	var pageToken string
 	limit := 20
-	id := "0"
+	if "" == id {
+		id = "0"
+	}
 queryF:
 	uri := fmt.Sprintf("%s?department_id=%s&page_token=%s&page_size=%d", uriDeptSimpList, id, pageToken, limit)
 	if recursive {

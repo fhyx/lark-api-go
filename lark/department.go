@@ -38,27 +38,27 @@ type Departments []Department
 //     "leader_open_id":"ou_4a2eb24a52b27c0b7fc6fd04162c0246",
 //     "create_group_chat":true
 // }
+
 type DepartmentUp struct {
-	NameCN  string `json:"deptNameCn"`
-	NameEN  string `json:"deptNameEn"`
-	Level   int    `json:"deptLevel,string"`
-	Leader  string `json:"managerId"`
-	OrderNo int    `json:"orderNo,string"`
-	Valid   int    `json:"valid,string"`
+	ID              string `json:"id"`
+	ParentID        string `json:"parent_id"`
+	Name            string `json:"name"`
+	LeaderUserID    string `json:"leader_user_id,omitempty"`
+	LeaderOpenID    string `json:"leader_open_id,omitempty"`
+	CreateGroupChat bool   `json:"create_group_chat,omitempty"`
 }
 
 type deptBatchReq struct {
-	Data []DepartmentUp `json:"deptInfo"`
+	Data []DepartmentUp `json:"departments"`
 }
 
-// DeptRespItem ...
 type DeptRespItem struct {
-	client.Error
-
-	CorpDeptID int `json:"corpDeptCode,string"`
+	TaskID []string `json:"task_id"`
 }
 
 type deptBatchResp struct {
+	client.Error
+
 	Data []DeptRespItem `json:"data"`
 }
 
