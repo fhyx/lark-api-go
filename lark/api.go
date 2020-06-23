@@ -10,16 +10,17 @@ import (
 	"fhyx.online/lark-api-go/client"
 )
 
+// consts
 const (
-	uriAPPToken    = "https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal/"
-	uriTenantToken = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal/"
+	uriAPPTokenInnel    = "https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal/"
+	uriTenantTokenInnel = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal/"
 
 	uriAuthorize = "https://open.feishu.cn/open-apis/authen/v1/access_token"
 
 	uriContactScope = "https://open.feishu.cn/open-apis/contact/v1/scope/get"
 
-	uriUserGet   = "https://open.feishu.cn/open-apis/authen/v1/user_info"
-	uriUserGetID = "https://open.feishu.cn/open-apis/user/v1/batch_get_id"
+	uriUserAuthGet = "https://open.feishu.cn/open-apis/authen/v1/user_info"
+	uriUserGetID   = "https://open.feishu.cn/open-apis/user/v1/batch_get_id"
 
 	uriUserBatchGet   = "https://open.feishu.cn/open-apis/contact/v1/user/batch_get"
 	uriUserListDetail = "https://open.feishu.cn/open-apis/contact/v1/department/user/detail/list"
@@ -56,10 +57,10 @@ func NewAPI(strs ...string) *API {
 	if corpID == "" || corpSecret == "" {
 		log.Printf("corpID or corpSecret are empty or not found")
 	}
-	ca := client.NewClient(uriAPPToken)
+	ca := client.NewClient(uriAPPTokenInnel)
 	ca.SetContentType("application/json")
 	ca.SetCorp(corpID, corpSecret)
-	ct := client.NewClient(uriTenantToken)
+	ct := client.NewClient(uriTenantTokenInnel)
 	ct.SetContentType("application/json")
 	ct.SetCorp(corpID, corpSecret)
 

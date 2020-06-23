@@ -112,18 +112,19 @@ func (z EType) String() string {
 //     }
 // }
 type User struct {
-	UserID           string        `json:"open_id"`                 // required
 	Name             string        `json:"name"`                    // 用户名
 	NameEN           string        `json:"en_name"`                 // 英文名
 	NamePY           string        `json:"name_py"`                 // 用户名拼音
-	EmployeeID       string        `json:"employee_id"`             // 员工ID
+	EmployeeID       string        `json:"employee_id"`             // 用户的 employee_id，申请了"获取用户 user_id"权限后返回
 	EmployeeNo       string        `json:"employee_no"`             // 工号
-	EmployeeType     EType         `json:"employee_type,omitempty"` // 员工类型
+	EmployeeType     EType         `json:"employee_type,omitempty"` // 员工类型。1:正式员工；2:实习生；3:外包；4:劳务；5:顾问
 	AvatarURI        string        `json:"avatar_url"`              // 头像，原始大小
+	OpenID           string        `json:"open_id"`                 // 用户的 open_id
+	UnionID          string        `json:"union_id"`                // 用户的 union_id,申请了"获取用户统一ID"权限后返回
 	Mobile           string        `json:"mobile"`                  // required
 	Email            string        `json:"email"`                   // required
 	Gender           gender.Gender `json:"gender,omitempty"`        // 性别
-	Status           Status        `json:"userStatus,omitempty"`    // 状态
+	Status           Status        `json:"userStatus,omitempty"`    // 用户状态，bit0(最低位): 1冻结，0未冻结；bit1:1离职，0在职；bit2:1未激活，0已激活
 	Description      string        `json:"description,emitempty"`   // 用户个人签名
 	Country          string        `json:"country,omitempty"`       // 用户所在国家
 	City             string        `json:"city,omitempty"`          // 用户所在城市
