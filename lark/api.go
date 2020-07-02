@@ -125,7 +125,7 @@ func uriForUserGet(uid string, at CType) string {
 	}
 }
 
-func (a *API) ListContactScope() (*AuthContactResponse, error) {
+func (a *API) ListContactScope() (ContactScoper, error) {
 	cr := new(AuthContactResponse)
 	err := a.ca.GetJSON(uriContactScope, cr)
 	if err != nil {
@@ -148,13 +148,20 @@ func (a *API) GetUser(uid string, at CType) (*User, error) {
 
 // ListUser ...
 func (a *API) ListUser(lr ListReq) (ListResult, error) {
-	if lr.Limit < 1 {
-		lr.Limit = 1
+	var uri string
+	if len(lr.OpenIDs) > 0 {
+		vals := url.Values{"open_ids": lr.OpenIDs}
+		uri = fmt.Sprintf("%s?%s", uriUserBatchGet, vals.Encode())
+	} else {
+		if lr.Limit < 1 {
+			lr.Limit = 1
+		}
+		uri = fmt.Sprintf("%s?department_id=%s&page_token=%s&page_size=%d", uriUserListDetail, lr.DeptID, lr.PageToken, lr.Limit)
+		if lr.IncChild && lr.Limit > 1 {
+			uri += "&fetch_child=true"
+		}
 	}
-	uri := fmt.Sprintf("%s?department_id=%s&page_token=%s&page_size=%d", uriUserListDetail, lr.DeptID, lr.PageToken, lr.Limit)
-	if lr.IncChild && lr.Limit > 1 {
-		uri += "&fetch_child=true"
-	}
+
 	logger().Debugw("listUser", "req", lr)
 
 	var ret = new(usersDetailResponse)

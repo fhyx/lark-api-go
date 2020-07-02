@@ -24,6 +24,23 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+func TestListContactScope(t *testing.T) {
+	lcs, err := api.ListContactScope()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("contact scope: %v", lcs)
+	lr := ListReq{
+		OpenIDs: lcs.GetOpenIDs(),
+	}
+	data, err := api.ListUser(lr)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("list %v", data)
+
+}
+
 // TestAPIDepartment test api // lark_CORP_ID= lark_CORP_SECRET=
 func TestAPIDepartment(t *testing.T) {
 
