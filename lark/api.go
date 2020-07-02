@@ -141,24 +141,20 @@ func (a *API) GetUser(uid string, at CType) (*User, error) {
 }
 
 // ListUser ...
-func (a *API) ListUser(deptID string, recursive bool) (data Users, hasMore bool, pageToken string, err error) {
-	offset := 0
-	limit := 50
-	uri := fmt.Sprintf("%s?department_id=%s&offset=%d&page_size=%d", uriUserListDetail, deptID, offset, limit)
-	if recursive {
+func (a *API) ListUser(lr ListReq) (ListResult, error) {
+	if lr.Limit < 1 {
+		lr.Limit = 1
+	}
+	uri := fmt.Sprintf("%s?department_id=%s&page_token=%d&page_size=%d", uriUserListDetail, lr.DeptID, lr.PageToken, lr.Limit)
+	if lr.IncChild && lr.Limit > 1 {
 		uri += "&fetch_child=true"
 	}
+	logger().Debugw("listUser", "req", lr)
 
-	var ret usersDetailResponse
-	err = a.ca.GetJSON(uri, &ret)
+	var ret = new(usersDetailResponse)
+	err := a.ca.GetJSON(uri, ret)
 
-	if err == nil {
-		hasMore = ret.Data.HasMore
-		pageToken = ret.Data.PageToken
-		data = ret.Data.Users
-	}
-
-	return
+	return ret, err
 }
 
 // GetsDepartments ...

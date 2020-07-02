@@ -140,6 +140,13 @@ type User struct {
 
 type Users []User
 
+// userListResp ...
+type userListResp struct {
+	HasMore   bool   `json:"hasMore"`
+	PageToken string `json:"pageToken,omitempty"`
+	Users     []User `json:"data"`
+}
+
 type usersSimpResponse struct {
 	client.Error
 
@@ -150,6 +157,18 @@ type usersSimpResponse struct {
 	} `json:"data"`
 }
 
+func (usr *usersSimpResponse) Users() Users {
+	return usr.Data.Users
+}
+
+func (usr *usersSimpResponse) HasMore() bool {
+	return usr.Data.HasMore
+}
+
+func (usr *usersSimpResponse) PageToken() string {
+	return usr.Data.PageToken
+}
+
 type usersDetailResponse struct {
 	client.Error
 
@@ -158,6 +177,18 @@ type usersDetailResponse struct {
 		PageToken string `json:"page_token,omitempty"`
 		Users     []User `json:"user_infos"`
 	} `json:"data"`
+}
+
+func (udr *usersDetailResponse) Users() Users {
+	return udr.Data.Users
+}
+
+func (udr *usersDetailResponse) HasMore() bool {
+	return udr.Data.HasMore
+}
+
+func (udr *usersDetailResponse) PageToken() string {
+	return udr.Data.PageToken
 }
 
 type UserUp = User
