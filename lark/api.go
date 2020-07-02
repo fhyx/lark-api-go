@@ -10,6 +10,8 @@ import (
 	"fhyx.online/lark-api-go/client"
 )
 
+type Error = client.Error
+
 // consts
 const (
 	uriAPPTokenInnel    = "https://open.feishu.cn/open-apis/auth/v3/app_access_token/internal/"
@@ -33,6 +35,10 @@ const (
 	uriDeptSimpList = "https://open.feishu.cn/open-apis/contact/v1/department/simple/list"      // 获取子部门列表
 	uriDeptBatchGet = "https://open.feishu.cn/open-apis/contact/v1/department/detail/batch_get" // 批量获取部门详情
 	uriDeptSync     = "https://open.feishu.cn/open-apis/contact/v2/department/batch_add"        // 批量添加部门
+)
+
+var (
+	_ IClient = (*API)(nil)
 )
 
 // API ...
@@ -145,7 +151,7 @@ func (a *API) ListUser(lr ListReq) (ListResult, error) {
 	if lr.Limit < 1 {
 		lr.Limit = 1
 	}
-	uri := fmt.Sprintf("%s?department_id=%s&page_token=%d&page_size=%d", uriUserListDetail, lr.DeptID, lr.PageToken, lr.Limit)
+	uri := fmt.Sprintf("%s?department_id=%s&page_token=%s&page_size=%d", uriUserListDetail, lr.DeptID, lr.PageToken, lr.Limit)
 	if lr.IncChild && lr.Limit > 1 {
 		uri += "&fetch_child=true"
 	}
@@ -153,6 +159,10 @@ func (a *API) ListUser(lr ListReq) (ListResult, error) {
 
 	var ret = new(usersDetailResponse)
 	err := a.ca.GetJSON(uri, ret)
+	if err != nil {
+		logger().Infow("getJSON fail", "uri", uri, "lr", lr, "err", err)
+		return nil, err
+	}
 
 	return ret, err
 }
@@ -169,7 +179,7 @@ func (a *API) GetsDepartments(ids []string) (data Departments, err error) {
 	return
 }
 
-// List child Department ...
+// ListDepartment child Department ...
 func (a *API) ListDepartment(recursive bool, id string) (data Departments, err error) {
 	var pageToken string
 	limit := 20
@@ -245,22 +255,17 @@ func (a *API) GetTaskStatus(taskID string) (res []DeptRespItem, err error) {
 }
 
 // SyncUser ...
-func (a *API) SyncUser(data []UserUp) (res []UserRespItem, err error) {
-	var req userBatchReq
-	req.Data = data
-
-	var buf []byte
-	buf, err = json.Marshal(&req)
+func (a *API) SyncUser(user UserUp) error {
+	buf, err := json.Marshal(user)
 	if err != nil {
-		return
+		return err
 	}
-	var resp userBatchResp
+	var resp Error
 	err = a.ca.PostJSON(uriUserBulk, buf, &resp)
 	if err != nil {
 		logger().Infow("sync User fail", "err", err)
-		return
+		return err
 	}
-	res = resp.Data
 	logger().Infow("sync User ok", "resp", resp)
-	return
+	return nil
 }

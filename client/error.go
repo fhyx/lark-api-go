@@ -11,5 +11,15 @@ type Error struct {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("code: %d, message: %s", e.Code, e.Message)
+	return fmt.Sprintf("code: %d, msg: %s", e.Code, e.Message)
+}
+
+// GetCode ...
+func (e *Error) GetCode() int {
+	return e.Code
+}
+
+// GetMessage ...
+func (e *Error) GetMessage() string {
+	return e.Message
 }

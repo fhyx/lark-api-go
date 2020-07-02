@@ -36,12 +36,12 @@ func TestAPIDepartment(t *testing.T) {
 
 	for _, dept := range data {
 		t.Logf("dept %v", dept)
-		users, err := api.ListUser(dept.ID, false)
+		data, err := api.ListUser(ListReq{DeptID: dept.ID})
 		if err != nil {
 			t.Fatal(err)
 		}
 		// t.Logf("users %v", users)
-		for _, user := range users {
+		for _, user := range data.Users() {
 			t.Logf("user %v", user)
 		}
 	}

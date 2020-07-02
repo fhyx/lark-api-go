@@ -136,6 +136,7 @@ type User struct {
 
 	Departments []string `json:"departments,omitempty"` // 所在部门，用户可能同时存在于多个部门
 
+	CustomAttrs map[string]interface{} `json:"custom_attrs,omitempty"`
 }
 
 type Users []User
@@ -192,31 +193,6 @@ func (udr *usersDetailResponse) PageToken() string {
 }
 
 type UserUp = User
-
-type userBatchReq struct {
-	Data []UserUp `json:"personInfo"`
-}
-
-// UserRespItem ...
-type UserRespItem struct {
-	client.Error
-
-	CorpUID string `json:"corpUserId"`
-}
-
-type userBatchResp struct {
-	Data []UserRespItem `json:"data"`
-}
-
-type userStatusUp struct {
-	CorpUID string `json:"corpUserId,omitempty"`
-	Mobile  string `json:"mobileNumber,omitempty"`
-	Email   string `json:"userEmail,omitempty"`
-}
-
-type userStatusReq struct {
-	Data []userStatusUp `json:"personInfo"`
-}
 
 // OAuth2UserInfo 为用户 OAuth2 验证登录后的简单信息
 type OAuth2UserInfo struct {

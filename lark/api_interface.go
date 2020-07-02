@@ -21,4 +21,5 @@ type IClient interface {
 	ListUser(r ListReq) (res ListResult, err error)
 	ListContactScope() (*AuthContactResponse, error)
 	SyncDepartment(data []DepartmentUp) (res []DeptRespItem, err error)
+	SyncUser(user UserUp) error
 }
