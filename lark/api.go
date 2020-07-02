@@ -141,7 +141,7 @@ func (a *API) GetUser(uid string, at CType) (*User, error) {
 }
 
 // ListUser ...
-func (a *API) ListUser(deptID string, recursive bool) (data Users, err error) {
+func (a *API) ListUser(deptID string, recursive bool) (data Users, hasMore bool, pageToken string, err error) {
 	offset := 0
 	limit := 50
 	uri := fmt.Sprintf("%s?department_id=%s&offset=%d&page_size=%d", uriUserListDetail, deptID, offset, limit)
@@ -153,6 +153,8 @@ func (a *API) ListUser(deptID string, recursive bool) (data Users, err error) {
 	err = a.ca.GetJSON(uri, &ret)
 
 	if err == nil {
+		hasMore = ret.Data.HasMore
+		pageToken = ret.Data.PageToken
 		data = ret.Data.Users
 	}
 

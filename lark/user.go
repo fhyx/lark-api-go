@@ -144,8 +144,9 @@ type usersSimpResponse struct {
 	client.Error
 
 	Data struct {
-		HasMore bool   `json:"has_more"`
-		Users   []User `json:"user_list"`
+		HasMore   bool   `json:"has_more"`
+		PageToken string `json:"page_token,omitempty"`
+		Users     []User `json:"user_list"`
 	} `json:"data"`
 }
 
@@ -153,8 +154,9 @@ type usersDetailResponse struct {
 	client.Error
 
 	Data struct {
-		HasMore bool   `json:"has_more"`
-		Users   []User `json:"user_infos"`
+		HasMore   bool   `json:"has_more"`
+		PageToken string `json:"page_token,omitempty"`
+		Users     []User `json:"user_infos"`
 	} `json:"data"`
 }
 
