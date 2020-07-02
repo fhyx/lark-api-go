@@ -7,6 +7,7 @@ type ListReq struct {
 	PageToken string   `json:"pageToken,omitempty"`
 	IncChild  bool     `json:"incChild"`
 	OpenIDs   []string `json:"openIDs"`
+	IsSimple  bool     `json:"isSimple,omitempty"`
 }
 
 // ListResult ...

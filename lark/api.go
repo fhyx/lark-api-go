@@ -156,7 +156,11 @@ func (a *API) ListUser(lr ListReq) (ListResult, error) {
 		if lr.Limit < 1 {
 			lr.Limit = 1
 		}
-		uri = fmt.Sprintf("%s?department_id=%s&page_token=%s&page_size=%d", uriUserListDetail, lr.DeptID, lr.PageToken, lr.Limit)
+		var prefix = uriUserListDetail
+		if lr.IsSimple {
+			prefix = uriUserListSimp
+		}
+		uri = fmt.Sprintf("%s?department_id=%s&page_token=%s&page_size=%d", prefix, lr.DeptID, lr.PageToken, lr.Limit)
 		if lr.IncChild && lr.Limit > 1 {
 			uri += "&fetch_child=true"
 		}
