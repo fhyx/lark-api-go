@@ -147,7 +147,7 @@ func (a *API) GetUser(uid string, at CType) (*User, error) {
 }
 
 // ListUser ...
-func (a *API) ListUser(lr ListReq) (ListResult, error) {
+func (a *API) ListUser(lr ListReq) (res ListResult, err error) {
 	var uri string
 	if len(lr.OpenIDs) > 0 {
 		vals := url.Values{"open_ids": lr.OpenIDs}
@@ -168,14 +168,20 @@ func (a *API) ListUser(lr ListReq) (ListResult, error) {
 
 	logger().Debugw("listUser", "req", lr)
 
-	var ret = new(usersDetailResponse)
-	err := a.ca.GetJSON(uri, ret)
+	if lr.IsSimple {
+		res = new(usersSimpResponse)
+	} else {
+		res = new(usersDetailResponse)
+	}
+
+	err = a.ca.GetJSON(uri, res)
 	if err != nil {
 		logger().Infow("getJSON fail", "uri", uri, "lr", lr, "err", err)
 		return nil, err
 	}
+	logger().Debugw("list user ", "res", res)
 
-	return ret, err
+	return res, err
 }
 
 // GetsDepartments ...
