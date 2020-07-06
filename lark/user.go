@@ -139,6 +139,11 @@ type User struct {
 	CustomAttrs map[string]interface{} `json:"custom_attrs,omitempty"`
 }
 
+// GetName ...
+func (u User) GetName() string {
+	return u.Name
+}
+
 type Users []User
 
 // userListResp ...
